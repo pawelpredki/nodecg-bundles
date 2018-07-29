@@ -1,0 +1,14 @@
+.section {
+  padding-right: 40px;
+  float: left;
+}
+
+.with-search {
+  display: flex;
+}
+
+.with-search > span {
+  margin-top: 10px;
+  margin-left: 5px;
+  cursor: pointer;
+}

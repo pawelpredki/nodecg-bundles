@@ -1,0 +1,45 @@
+{
+  "name": "plpalotwitch",
+  "version": "0.0.0",
+  "description": "Twitch overlay for my channel",
+  "homepage": "",
+  "author": {
+    "name": "Paweł Prędki",
+    "email": "papredki@gmail.com",
+    "url": ""
+  },
+  "files": [
+    "dashboard",
+    "graphics",
+    "extension"
+  ],
+  "keywords": [
+    "",
+    "nodecg-bundle"
+  ],
+  "nodecg": {
+    "compatibleRange": "^1.0.0",
+    "dashboardPanels": [
+      {
+        "name": "panel",
+        "title": "Panel",
+        "width": 7,
+        "file": "panel.html",
+        "headerColor": "#9f9bbd"
+      }
+    ],
+    "graphics": [
+      {
+        "file": "index.html",
+        "width": 1280,
+        "height": 720
+      }
+    ]
+  },
+  "repository": "https://github.com/nodecg/nodecg.git",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "request": "^2.87.0",
+    "rest-handler": "^1.2.17"
+  }
+}

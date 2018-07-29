@@ -1,0 +1,60 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title></title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="apple-touch-icon" href="icon.png">
+  <!-- Place favicon.ico in the root directory -->
+
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/fonts.css">
+  <link rel="stylesheet" href="css/custom.css">
+</head>
+
+<body>
+  <!--[if lte IE 9]>
+    <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+  <![endif]-->
+
+  <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+  <script src="js/main.js"></script>
+
+<div class="parent">
+  <div class="message container">
+    <span class="runtime" id="message-line-1"></span>
+    <br>
+    <span class="runtime" id="message-line-2"></span>
+  </div>
+
+  <div class="leaderboard container">
+    <div class="runtime top" id="top-div">WR <span id="top-time"></span></div>
+    <div class="runtime second" id="second-div">#2 <span id="second-time"></span></div>
+    <div class="runtime third" id="third-div">#3 <span id="third-time"></span></div>
+    <div class="runtime" id="runs"></div>
+  </div>
+
+  <div class="follower container">
+    <img id="follower-img"/>
+    <div class="runtime">Latest followers</div>
+    <div class="runtime"><span id="follower-name"></span></div>
+  </div>
+
+  <div class="timer">
+    <img id="timer-image" src="assets/gold.png"/>
+  </div>
+
+  <div class="personal-best">
+    <img id="personal-best-image" src="assets/pb.png"/>
+  </div>
+</div >
+
+</body>
+
+</html>

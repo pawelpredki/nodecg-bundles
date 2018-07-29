@@ -1,0 +1,88 @@
+.parent {
+  width: 1280px;
+  height: 720px;
+  position: relative;
+  background-color: black;
+}
+
+.container {
+  float: right;
+}
+
+.follower {
+  width: 300px;
+}
+
+.leaderboard {
+  width: 400px;
+}
+
+.message {
+  float: left;
+  width: 570px;
+  margin-left: 5px;
+}
+
+.container > div {
+  margin-left: 10px;
+  height: 20px;
+  line-height: 20px;
+}
+
+.follower > div {
+  height: 20px;
+}
+
+.follower > img {
+  float: left;
+  height: 39px;
+  margin-right: 10px;
+  margin-bottom: 3px;
+  margin-top: 3px
+}
+
+.runtime {
+  font-family: PressStart;
+  font-size: 12px;
+  color: white;
+}
+
+.runtime.top {
+  color: gold;
+}
+
+.runtime.second {
+  color: #c0c0c0;
+  display: none;
+}
+
+.runtime.third {
+  color: #e69900;
+  display: none;
+}
+
+.runtime.me {
+  color: red;
+}
+
+.timer {
+  position: absolute;
+  left: 240px;
+  bottom: 60px;
+}
+
+#timer-image {
+  width: 0px;
+  height: 0px;
+}
+
+.personal-best {
+  position: absolute;
+  right: 360px;
+  top: 60px;
+}
+
+#personal-best-image {
+  transform: rotate(-30deg);
+  width: 0px;
+}

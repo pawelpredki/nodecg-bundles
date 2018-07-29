@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+	<style>
+		.monospace {
+			font-family: monospace;
+		}
+	</style>
+
+  <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="../bower_components/components-font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+  <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+  <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="js/main.js"></script>
+
+  <div class="section">
+    <h2>Show / Hide</h2>
+    <h5>Transparency</h5>
+    <button type="button" class="btn btn-primary" onclick="switchTransparent(true);" id="transparent-on">On</button>
+    <button type="button" class="btn btn-primary disabled" onclick="switchTransparent(false);" id="transparent-off">Off</button>
+    <h5>Personal Best</h5>
+    <button type="button" class="btn btn-primary" onclick="switchPersonalBestImage(true)" id="personal-best-on">On</button>
+    <button type="button" class="btn btn-primary disabled" onclick="switchPersonalBestImage(false)" id="personal-best-off">Off</button>
+  </div>
+  <div class="section">
+    <h2>Followers</h2>
+    <button type="button" class="btn btn-primary" onclick="updateFollowers();">Update</button>
+  </div>
+  <div class="section">
+    <h2>Search</h2>
+    <div class="with-search form-group">
+      <input class="form-control" id="game-name" placeholder="name">
+      <span class="fas fa-search search" onclick="searchGame()"></span>
+    </div>
+    <h5>Game</h5>
+    <div class="form-group">
+      <select class="form-control" id="game-name-search-result" onchange="gameSelected()">
+      </select>
+    </div>
+    <h5>Category</h5>
+    <div class="form-group">
+      <select class="form-control" id="game-category-search-result">
+      </select>
+    </div>
+    <button type="button" class="btn btn-primary" onclick="changeGame();">Apply</button>
+  </div>
+  <div class="section">
+    <h2>Messages</h2>
+    <div class="form-group">
+      <input class="form-control" id="message-line-1">
+    </div>
+    <div class="form-group">
+      <input class="form-control" id="message-line-2">
+    </div>
+    <button type="button" class="btn btn-primary" onclick="changeMessages();">Apply</button>
+  </div>
+</body>
+</html>
