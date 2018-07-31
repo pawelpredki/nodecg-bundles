@@ -1,0 +1,9 @@
+{
+  "generator-nodecg": {
+    "promptValues": {
+      "authorName": "Paweł Prędki",
+      "authorEmail": "papredki@gmail.com",
+      "authorUrl": ""
+    }
+  }
+}

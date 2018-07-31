@@ -1,0 +1,194 @@
+.ncgsplit-top {
+  position: relative;
+  left: 0px;
+  top: 0px;
+  width: 1280px;
+  height: 720px;
+  border: solid;
+  border-width: 10px;
+}
+
+@font-face {
+  font-family: PressStart;
+  src: url(../fonts/PressStart2P.ttf);
+}
+
+span {
+  font-family: PressStart;
+  font-size: 10px;
+  color: white;
+}
+
+span.gold {
+  color: gold;
+}
+
+span.blue {
+  color: #5b9aff;
+}
+
+span.red {
+  color: #ff4242;
+}
+
+table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+tr {
+  height: 30px;
+  border: solid;
+  border-width: 1px 0;
+  border-color: gray;
+}
+
+tr:nth-child(odd) {
+  background-color: #333333;
+}
+
+tr:nth-child(even) {
+  background-color: #191919;
+}
+
+td {
+  padding: 0;
+  margin: 0;
+}
+
+.ncgsplit-segment-table-icon {
+  width: 15%;
+}
+
+.ncgsplit-segment-table-icon > img {
+  width: 100%;
+  display: block;
+}
+
+.ncgsplit-segment-table-name {
+  width: 40%;
+}
+
+.ncgsplit-segment-table-name > span {
+  position: relative;
+  left: 5px;
+}
+
+.ncgsplit-segment-table-split {
+  width: 15%;
+}
+
+.ncgsplit-segment-table-split > span {
+  position: relative;
+  float: right;
+}
+
+.ncgsplit-segment-table-time {
+  width: 30%;
+}
+
+.ncgsplit-segment-table-time > span {
+  position: relative;
+  float: right;
+  right: 2px;
+}
+
+.ncgsplit-parent {
+  position: absolute;
+  left: 247px;
+  bottom: 0px;
+  width : 266px;
+  height : 360px;
+  background-color: black;
+
+}
+
+.ncgsplit-top-bar {
+  position: relative;
+  height: 40px;
+  width: 100%;
+}
+
+.ncgsplit-game-icon {
+  display: none;
+  position: relative;
+  overflow: hidden;
+  width: 20%;
+  float: left;
+}
+
+.ncgsplit-game-icon > img {
+  position: relative;
+  left: 50%;
+  width: 80%;
+  transform: translate(-50%, 0%);
+}
+
+.ncgsplit-game-title {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  float: left;
+}
+
+.ncgsplit-game-title > span:first-child {
+  display: block;
+  width: 100%;
+  height: 80%;
+  text-align: center;
+  margin: 5px auto;
+  font-size: 13px;
+  color: gold;
+  line-height: 1.3;
+}
+
+.ncgsplit-game-title > span {
+  font-size: 8px;
+}
+
+.ncgsplit-game-title > span:nth-child(2) {
+  position: absolute;
+  bottom: 5px;
+  left: 2%;
+}
+
+.ncgsplit-game-title > span:nth-child(3) {
+  position: absolute;
+  right: 2%;
+  bottom: 5px;
+}
+
+.ncgsplit-main-timer {
+  height: 50px;
+}
+
+.ncgsplit-main-timer > span {
+  position: relative;
+  float: right;
+  top: 10px;
+  right: 5px;
+  color: green;
+  font-size: 28px;
+}
+
+.ncgsplit-sob-bar {
+  position: relative;
+  height: 20px;
+  width: 100%;
+}
+
+.ncgsplit-footer > span {
+}
+
+.ncgsplit-footer > span:nth-child(1) {
+  position: relative;
+  left: 5px;
+  float:left;
+}
+
+.ncgsplit-footer > span:nth-child(2) {
+  position: relative;
+  right: 5px;
+  float: right;
+}
