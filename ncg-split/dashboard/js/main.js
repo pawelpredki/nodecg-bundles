@@ -47,22 +47,23 @@ function timerStart() {
 function timerReset() {
   if ("RUNNING" === runObject.state || "FINISHED" == runObject.state) {
     let currentState = runObject.state;
+    let totalTimeLiveTemp = runObject.totalTimeLive;
+    let currentSegmentTemp = runObject.currentSegment;
     runObject.state = "READY";
     runObject.currentSegment = 0;
     runObject.startTime = 0;
-    let totalTimeLiveTemp = runObject.totalTimeLive;
     runObject.totalTimeLive = 0;
     runObject.attempts = runObject.attempts + 1;
-    if ("FINISHED" == currentState) {
-      runObject.completedAttempts = runObject.completedAttempts + 1;
-      if ($("#chk-save-gold").is(":checked")) {
-        for (var i in runObject.segments) {
-          if (runObject.segments[i].timeLive < runObject.segments[i].timeGold) {
-            console.log("Update gold for segment <" + i + ">");
-            runObject.segments[i].timeGold = runObject.segments[i].timeLive;
-          }
+    if ($("#chk-save-gold").is(":checked")) {
+      for (var i = 0; i < currentSegmentTemp; i++) {
+        if (runObject.segments[i].timeLive < runObject.segments[i].timeGold) {
+          console.log("Update gold for segment <" + i + ">");
+          runObject.segments[i].timeGold = runObject.segments[i].timeLive;
         }
       }
+    }
+    if ("FINISHED" == currentState) {
+      runObject.completedAttempts = runObject.completedAttempts + 1;
       if ($("#chk-save-pb").is(":checked")) {
         if (totalTimeLiveTemp < runObject.totalTimePb) {
           runObject.totalTimePb = totalTimeLiveTemp;
