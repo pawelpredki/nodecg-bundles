@@ -1,3 +1,7 @@
+const MAX_ROWS = 8;
+const ROWS_KEEP = 4;
+const SPLIT_ROW = '<tr><td class="ncgsplit-segment-table-icon"><img src=""/></td><td class="ncgsplit-segment-table-name"><span></span></td><td class="ncgsplit-segment-table-split"><span></span></td><td class="ncgsplit-segment-table-time"><span></span></td></tr>';
+
 let startTime = 0;
 let timerInterval = -1;
 
@@ -13,7 +17,10 @@ nodecg.listenFor('ncgsplit-run-ready', run => {
 
   let totalRunTime = 0;
   let sumOfBest = 0;
-  for (var i = 0 ; i < run.segments.length ; i++) {
+  let totalSegments = run.segments.length;
+  $("#ncgsplit-segment-table-id").html("");
+  for (var i = 0 ; i < totalSegments ; i++) {
+    $("#ncgsplit-segment-table-id").append(SPLIT_ROW);
     let segment = run.segments[i];
     let row = $(".ncgsplit-segment-table tr:nth-child("+(i+1)+")");
     totalRunTime += segment.timePb;
@@ -24,6 +31,12 @@ nodecg.listenFor('ncgsplit-run-ready', run => {
     row.find('td:nth-child(3) span').removeClass();
     displayTime(row.find('td:nth-child(4) span'), totalRunTime);
     row.find('td:nth-child(4) span').removeClass();
+    if (i >= MAX_ROWS) {
+      row.hide();
+    }
+  }
+  for (var i = totalSegments; i < MAX_ROWS; i++) {
+    $("#ncgsplit-segment-table-id").append(SPLIT_ROW);
   }
 
   if (0 == sumOfBest) {
@@ -46,8 +59,8 @@ nodecg.listenFor('ncgsplit-run-split', run => {
 });
 
 nodecg.listenFor('ncgsplit-run-finish', run => {
-  splitSegment(run);
   clearInterval(timerInterval);
+  splitSegment(run);
 });
 
 const splitSegment = function(run) {
@@ -64,6 +77,38 @@ const splitSegment = function(run) {
   row.find('td:nth-child(3) span').addClass(style);
   displayTime(row.find('td:nth-child(4) span'), totalRunTime);
   row.find('td:nth-child(4) span').addClass(style);
+
+  // Check if we need to scroll segment list
+  let totalSegments = run.segments.length;
+  if (finishedSegment > ROWS_KEEP && finishedSegment <= (totalSegments - (MAX_ROWS-ROWS_KEEP))) {
+    scrollSegmentList('down');
+  }
+
+  if (finishedSegment == totalSegments-1) {
+    displayTime($("#ncgsplit-main-timer-id"), totalRunTime);
+  }
+}
+
+nodecg.listenFor('ncgsplit-scroll-segment', dir => {
+  scrollSegmentList(dir);
+})
+
+const scrollSegmentList = function (dir) {
+  let firstVisible = $(".ncgsplit-segment-table tr:visible:first");
+  let lastVisible = $(".ncgsplit-segment-table tr:visible:last");
+  if ('down' === dir) {
+    let nextVisible = $(lastVisible).next();
+    if (nextVisible.length > 0) {
+      $(firstVisible).hide();
+      $(nextVisible).show();
+    }
+  } else {
+    let prevVisible = $(firstVisible).prev();
+    if (prevVisible.length > 0) {
+      $(prevVisible).show();
+      $(lastVisible).hide();
+    }
+  }
 }
 
 const displayTime = function(spanElement, time) {

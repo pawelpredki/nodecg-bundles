@@ -86,3 +86,12 @@
   transform: rotate(-30deg);
   width: 0px;
 }
+
+#ncg-split-iframe {
+  position: absolute;
+  width: 266px;
+  height: 360px;
+  bottom: 0px;
+  left: 250px;
+  z-index: -10;
+}

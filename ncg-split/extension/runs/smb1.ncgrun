@@ -2,6 +2,7 @@
   "title" : "Super Mario Bros.",
   "category" : "Any%",
   "attempts" : 58,
+  "completedAttempts":1,
   "state" : "LOADED",
   "currentSegment" : -1,
   "startTime" : -1,

@@ -1,5 +1,7 @@
 const KEYSTROKE_START_SPLIT = " ".charCodeAt(0);
 const KEYSTROKE_RESET = "z".charCodeAt(0);
+const KEYSTROKE_SCROLL_UP = "q".charCodeAt(0);
+const KEYSTROKE_SCROLL_DOWN = "a".charCodeAt(0);
 
 let runObject = {
   state : "UNLOADED"
@@ -23,7 +25,6 @@ nodecg.listenFor("ncgsplit-run-loaded", runData => {
   runObject = runData;
   runObject.state = "READY";
   nodecg.sendMessage('ncgsplit-run-ready', runObject);
-  console.log(runObject);
 });
 
 function loadRun() {
@@ -39,18 +40,20 @@ function timerStart() {
     runObject.startTime = startTime;
     runObject.totalTimeLive = 0;
     nodecg.sendMessage('ncgsplit-run-start', runObject);
+    nodecg.sendMessageToBundle('timerInfo', 'plpalotwitch', {"type":"RUN_START"});
   }
 }
 
 function timerReset() {
   if ("RUNNING" === runObject.state || "FINISHED" == runObject.state) {
+    let currentState = runObject.state;
     runObject.state = "READY";
     runObject.currentSegment = 0;
     runObject.startTime = 0;
     let totalTimeLiveTemp = runObject.totalTimeLive;
     runObject.totalTimeLive = 0;
     runObject.attempts = runObject.attempts + 1;
-    if ("FINISHED" == runObject.state) {
+    if ("FINISHED" == currentState) {
       runObject.completedAttempts = runObject.completedAttempts + 1;
       if ($("#chk-save-gold").is(":checked")) {
         for (var i in runObject.segments) {
@@ -84,12 +87,25 @@ function timerSplit() {
       runObject.currentSegment++;
       if (runObject.currentSegment == runObject.segments.length) {
         runObject.state = "FINISHED";
+        nodecg.sendMessageToBundle('timerInfo', 'plpalotwitch', {"type":"RUN_COMPLETED", "liveTime":runObject.totalTimeLive, "runTime":runObject.totalTimePb});
         nodecg.sendMessage('ncgsplit-run-finish', runObject);
       } else {
+        let message = {
+          "type" : "SEGMENT",
+          "segmentNo" : runObject.currentSegment+1,
+          "segmentTotal" : runObject.segments.length,
+          "bestDelta" : runObject.segments[runObject.currentSegment-1].timeLive - runObject.segments[runObject.currentSegment-1].timeGold,
+          "runDelta" : runObject.segments[runObject.currentSegment-1].timeLive - runObject.segments[runObject.currentSegment-1].timePb
+        }
+        nodecg.sendMessageToBundle('timerInfo', 'plpalotwitch', message);
         nodecg.sendMessage('ncgsplit-run-split', runObject);
       }
     }
   }
+}
+
+function scrollSegmentList(dir) {
+  nodecg.sendMessage('ncgsplit-scroll-segment', dir);
 }
 
 $(document).on("keypress", function (e) {
@@ -103,6 +119,12 @@ $(document).on("keypress", function (e) {
         break;
       case KEYSTROKE_RESET:
         timerReset();
+        break;
+      case KEYSTROKE_SCROLL_UP:
+        scrollSegmentList('up');
+        break;
+      case KEYSTROKE_SCROLL_DOWN:
+        scrollSegmentList('down');
         break;
     }
 });

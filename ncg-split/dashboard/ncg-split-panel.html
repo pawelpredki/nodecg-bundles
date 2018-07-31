@@ -23,9 +23,9 @@
     <span class="fas fa-sync-alt sync-alt" onclick="loadRunList()"></span>
     <span class="fas fa-download download" onclick="loadRun()"></span>
   </div>
-  <button type="button" class="btn btn-primary" onclick="timerStart();" id="btn-timer-start">Start</button>
-  <button type="button" class="btn btn-primary" onclick="timerSplit();" id="btn-timer-split">Split</button>
-  <button type="button" class="btn btn-primary" onclick="timerReset();" id="btn-timer-reset">Reset</button>
+  <button type="button" class="btn btn-primary" onclick="timerStart();" id="btn-timer-start">Start (space)</button>
+  <button type="button" class="btn btn-primary" onclick="timerSplit();" id="btn-timer-split">Split (space)</button>
+  <button type="button" class="btn btn-primary" onclick="timerReset();" id="btn-timer-reset">Reset (z)</button>
   <div class="form-check">
     <input class="form-check-input" type="checkbox" value="" id="chk-save-gold">
     <label class="form-check-label" for="chk-save-gold">
@@ -38,5 +38,7 @@
       Save PB run on reset
     </label>
   </div>
+  <button type="button" class="btn btn-primary" onclick="scrollSegmentList('up');" id="btn-scroll-up">Up (q)</button>
+  <button type="button" class="btn btn-primary" onclick="scrollSegmentList('down');" id="btn-scroll-down">Down (a)</button>
 </body>
 </html>
