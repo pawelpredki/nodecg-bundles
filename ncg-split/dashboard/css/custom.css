@@ -1,0 +1,9 @@
+.with-icon {
+  display: flex;
+}
+
+.with-icon > span {
+  margin-top: 10px;
+  margin-left: 5px;
+  cursor: pointer;
+}

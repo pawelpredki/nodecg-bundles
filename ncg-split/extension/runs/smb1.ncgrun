@@ -2,6 +2,11 @@
   "title" : "Super Mario Bros.",
   "category" : "Any%",
   "attempts" : 58,
+  "state" : "LOADED",
+  "currentSegment" : -1,
+  "startTime" : -1,
+  "totalTimeLive" : -1,
+  "totalTimePb" : 301000,
   "segments" : [
     {
       "name" : "1-1",
