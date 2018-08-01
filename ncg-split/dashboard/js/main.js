@@ -25,6 +25,10 @@ nodecg.listenFor("ncgsplit-run-loaded", runData => {
   runObject = runData;
   runObject.state = "READY";
   nodecg.sendMessage('ncgsplit-run-ready', runObject);
+
+  toggleButtonEnable("btn-timer-start", "enable");
+  toggleButtonEnable("btn-scroll-up", "enable");
+  toggleButtonEnable("btn-scroll-down", "enable");
 });
 
 function loadRun() {
@@ -41,6 +45,10 @@ function timerStart() {
     runObject.totalTimeLive = 0;
     nodecg.sendMessage('ncgsplit-run-start', runObject);
     nodecg.sendMessageToBundle('timerInfo', 'plpalotwitch', {"type":"RUN_START"});
+
+    toggleButtonEnable("btn-timer-start", "disable");
+    toggleButtonEnable("btn-timer-split", "enable");
+    toggleButtonEnable("btn-timer-reset", "enable");
   }
 }
 
@@ -76,6 +84,10 @@ function timerReset() {
       nodecg.sendMessage('ncgsplit-run-save', runObject);
     }
     nodecg.sendMessage('ncgsplit-run-ready', runObject);
+
+    toggleButtonEnable("btn-timer-start", "enable");
+    toggleButtonEnable("btn-timer-split", "disable");
+    toggleButtonEnable("btn-timer-reset", "disable");
   }
 }
 
@@ -107,6 +119,16 @@ function timerSplit() {
 
 function scrollSegmentList(dir) {
   nodecg.sendMessage('ncgsplit-scroll-segment', dir);
+}
+
+function toggleButtonEnable(button, state) {
+  if ("enable" === state) {
+      $("#"+button).attr("disabled", false);
+      $("#"+button).addClass("btn-primary");
+  } else {
+      $("#"+button).attr("disabled", true);
+      $("#"+button).removeClass("btn-primary");
+  }
 }
 
 $(document).on("keypress", function (e) {
