@@ -1,4 +1,4 @@
-const EDITOR_SEGMENT_ROW = '<tr><td scope="col"><div class="form-group"><input class="form-control" placeholder=""></div></td><td scope="col"><div class="form-group"><input class="form-control" placeholder=""></div></td><td scope="col"><div class="form-group"><input class="form-control" placeholder=""></div></td><td scope="col"><span class="fas fa-minus-square minus-square editor-remove"></span></td></tr>';
+const EDITOR_SEGMENT_ROW = '<tr><td scope="col"><div class="form-group editor-segment-form"><input class="form-control" placeholder=""></div></td><td scope="col"><div class="form-group editor-segment-form"><input class="form-control" placeholder=""></div></td><td scope="col"><div class="form-group editor-segment-form"><input class="form-control" placeholder=""></div></td><td scope="col"><span class="fas fa-minus-square minus-square editor-remove"></span></td></tr>';
 
 const KEYSTROKE_START_SPLIT = " ".charCodeAt(0);
 const KEYSTROKE_RESET = "z".charCodeAt(0);

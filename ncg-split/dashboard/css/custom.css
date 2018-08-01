@@ -68,3 +68,7 @@ tr th:nth-child(4) {
 .editor-add, .editor-remove {
   cursor: pointer;
 }
+
+.editor-segment-form {
+  margin-bottom: 0px;
+}
