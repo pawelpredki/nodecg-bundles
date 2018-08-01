@@ -6,6 +6,15 @@ nodecg.Replicant('transparent').on('change', (newValue, oldValue) => {
   }
 });
 
+// Timer
+nodecg.Replicant("timerActive").on('change', (newValue) => {
+  if (newValue) {
+    $("#ncg-split-iframe").show();
+  } else {
+    $("#ncg-split-iframe").hide();
+  }
+});
+
 // Followers
 let followerIndex = 0;
 const followersReplicant = nodecg.Replicant('followers');
@@ -15,7 +24,7 @@ followersReplicant.on("change", newValue => {
 });
 function switchFollowers() {
 
-  if (0 === followers.length) {
+  if (!followers || 0 === followers.length) {
     return;
   }
   $("#follower-img").fadeOut(500, function() {

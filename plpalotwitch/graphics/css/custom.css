@@ -69,6 +69,7 @@
   position: absolute;
   left: 240px;
   bottom: 60px;
+  z-index: 10;
 }
 
 #timer-image {
@@ -80,6 +81,7 @@
   position: absolute;
   right: 360px;
   top: 60px;
+  z-index: 10;
 }
 
 #personal-best-image {
@@ -93,5 +95,4 @@
   height: 360px;
   bottom: 0px;
   left: 250px;
-  z-index: -10;
 }

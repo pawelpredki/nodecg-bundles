@@ -44,6 +44,20 @@ function switchPersonalBestImage(show) {
   personalBestActive.value = show;
 }
 
+const timerActive = nodecg.Replicant('timerActive', {defaultValue : false});
+timerActive.on("change", newValue => {
+  if (newValue) {
+      $("#timer-off").removeClass("disabled");
+      $("#timer-on").addClass("disabled");
+  } else {
+      $("#timer-on").removeClass("disabled");
+      $("#timer-off").addClass("disabled");
+  }
+});
+function switchTimer(show) {
+  timerActive.value = show;
+}
+
 // Search games and categories
 const gameSearchTerm = nodecg.Replicant('gameSearchTerm', {defaultValue : 'Contra'});
 gameSearchTerm.on("change", newValue => {
