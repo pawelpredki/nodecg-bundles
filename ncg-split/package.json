@@ -26,7 +26,7 @@
       {
         "name": "ncg-split-panel",
         "title": "NodeCG Timer",
-        "width": 2,
+        "width": 4,
         "file": "ncg-split-panel.html",
         "headerColor": "#9f9bbd"
       }
