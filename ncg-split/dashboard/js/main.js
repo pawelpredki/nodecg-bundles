@@ -290,8 +290,8 @@ function timerReset() {
           }
         }
       }
-      nodecg.sendMessage('ncgsplit-run-save', runObject);
     }
+    nodecg.sendMessage('ncgsplit-run-save', runObject);
     nodecg.sendMessage('ncgsplit-run-ready', runObject);
 
     runState.value = runObject.state;

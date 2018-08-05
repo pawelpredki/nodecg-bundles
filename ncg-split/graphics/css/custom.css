@@ -21,8 +21,16 @@ span.blue {
   color: #5b9aff;
 }
 
+span.badblue {
+  color: #99c0ff;
+}
+
 span.red {
   color: #ff4242;
+}
+
+span.goodred {
+  color: #ffb3b3;
 }
 
 table {
@@ -93,7 +101,7 @@ td {
   position: absolute;
   left: 0px;
   top: 0px;
-  width : 266px;
+  width : 260px;
   height : 360px;
   background-color: black;
 
