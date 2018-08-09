@@ -68,12 +68,35 @@ const splitSegment = function(run) {
   let segment = run.segments[finishedSegment];
   let row = $(".ncgsplit-segment-table tr:nth-child("+(finishedSegment+1)+")");
   let totalRunTime = run.totalTimeLive;
+  let totalTimePb = 0;
+  for (var i = 0; i < run.currentSegment; i++) {
+    totalTimePb += run.segments[i].timePb;
+  }
   let timeLive = segment.timeLive;
   let timePb = segment.timePb;
   let timeGold = segment.timeGold;
-  let style = (timeLive < timeGold) ? "gold" : ((timeLive < timePb) ? "blue" : "red");
 
-  displayTime(row.find('td:nth-child(3) span'), timeLive - timePb);
+  let goldDiff = timeLive - timeGold;
+  let segmentDiff = timeLive - timePb;
+  let totalDiff = totalRunTime - totalTimePb;
+  let style = "";
+  if (goldDiff < 0) {
+    style = "gold";
+  } else if (totalDiff < 0) {
+    if (segmentDiff < 0) {
+      style = "blue";
+    } else {
+      style = "badblue";
+    }
+  } else {
+    if (segmentDiff < 0) {
+      style = "goodred";
+    } else {
+      style = "red";
+    }
+  }
+
+  displayTime(row.find('td:nth-child(3) span'), totalDiff);
   row.find('td:nth-child(3) span').addClass(style);
   displayTime(row.find('td:nth-child(4) span'), totalRunTime);
   row.find('td:nth-child(4) span').addClass(style);

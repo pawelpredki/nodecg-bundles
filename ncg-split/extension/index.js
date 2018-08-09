@@ -29,8 +29,7 @@ module.exports = nodecg => {
 	const runList = nodecg.Replicant("ncgsplit-run-list");
 
 	nodecg.listenFor('ncgsplit-load-run-list', () => 	{
-		let files = fs.readdirSync(__dirname + '/runs/');
-		runList.value = files;
+		loadRunList();
 	});
 
 	nodecg.listenFor('ncgsplit-load-run', (file) => 	{
@@ -44,5 +43,16 @@ module.exports = nodecg => {
 		console.log("Write: " + JSON.stringify(json));
 		fs.writeFileSync(__dirname + '/runs/' + json.fileName, JSON.stringify(json), 'utf8');
 	});
+
+	nodecg.listenFor('ncgsplit-run-delete', (file) => {
+		console.log("Delete: " + file);
+		fs.unlinkSync(__dirname + '/runs/' + file);
+		loadRunList();
+	});
+
+	const loadRunList = function() {
+		let files = fs.readdirSync(__dirname + '/runs/');
+		runList.value = files;
+	}
 
 }

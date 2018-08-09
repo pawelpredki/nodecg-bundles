@@ -1,3 +1,7 @@
+.section {
+  margin-bottom: 10px;
+}
+
 .with-icon {
   display: flex;
 }
@@ -6,4 +10,66 @@
   margin-top: 10px;
   margin-left: 5px;
   cursor: pointer;
+}
+
+.table {
+  margin-bottom: 0px;
+}
+
+tr th:nth-child(1) {
+  width: 45%;
+}
+
+tr th:nth-child(2) {
+  width: 25%;
+}
+
+tr th:nth-child(3) {
+  width: 25%;
+}
+
+tr th:nth-child(4) {
+  width: 5%;
+}
+
+.editor-remove {
+  position: relative;
+  top: 50%;
+  transform: translate(0%, 50%);
+}
+
+.editor-save > * {
+  float: left;
+  margin-right: 5px;
+}
+
+.editor-error {
+  background-color: #ff9292;
+}
+
+#editor-header-hide {
+  display: none;
+}
+
+.editor {
+  display: none;
+}
+
+.editor-header > * {
+  float: left;
+}
+
+.editor-header > span {
+  position: relative;
+  top: 10px;
+  left: 10px;
+  cursor: pointer;
+}
+
+.editor-add, .editor-remove {
+  cursor: pointer;
+}
+
+.editor-segment-form {
+  margin-bottom: 0px;
 }

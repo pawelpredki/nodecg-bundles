@@ -16,29 +16,88 @@
   <script src="../bower_components/jquery/dist/jquery.min.js"></script>
   <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
   <script src="js/main.js"></script>
-  <h5>Run</h5>
-  <div class="with-icon form-group">
-      <select class="form-control" id="run-search-list">
-      </select>
-    <span class="fas fa-sync-alt sync-alt" onclick="loadRunList()"></span>
-    <span class="fas fa-download download" onclick="loadRun()"></span>
+  <div class="section">
+    <h3>Run</h3>
+    <div class="with-icon form-group">
+        <select class="form-control" id="run-search-list">
+        </select>
+      <span class="fas fa-sync-alt sync-alt" onclick="loadRunList()"></span>
+      <span class="fas fa-download download" onclick="loadRun()"></span>
+    </div>
+    <button disabled type="button" class="btn" onclick="timerStart();" id="btn-timer-start">Start (space)</button>
+    <button disabled type="button" class="btn" onclick="timerSplit();" id="btn-timer-split">Split (space)</button>
+    <button disabled type="button" class="btn" onclick="timerReset();" id="btn-timer-reset">Reset (z)</button>
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" value="" id="chk-save-gold">
+      <label class="form-check-label" for="chk-save-gold">
+        Save gold splits on reset
+      </label>
+    </div>
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" value="" id="chk-save-pb">
+      <label class="form-check-label" for="chk-save-pb">
+        Save PB run on reset
+      </label>
+    </div>
+    <button disabled type="button" class="btn" onclick="scrollSegmentList('up');" id="btn-scroll-up">Up (q)</button>
+    <button disabled type="button" class="btn" onclick="scrollSegmentList('down');" id="btn-scroll-down">Down (a)</button>
   </div>
-  <button disabled type="button" class="btn" onclick="timerStart();" id="btn-timer-start">Start (space)</button>
-  <button disabled type="button" class="btn" onclick="timerSplit();" id="btn-timer-split">Split (space)</button>
-  <button disabled type="button" class="btn" onclick="timerReset();" id="btn-timer-reset">Reset (z)</button>
-  <div class="form-check">
-    <input class="form-check-input" type="checkbox" value="" id="chk-save-gold">
-    <label class="form-check-label" for="chk-save-gold">
-      Save gold splits on reset
-    </label>
+  <div class="section">
+    <div class="editor-header">
+      <h3>Editor</h3>
+      <span class="fas fa-eye eye" onclick="toggleEditor(true)" id="editor-header-show"></span>
+      <span class="fas fa-eye-slash" onclick="toggleEditor(false)" id="editor-header-hide"></span>
+    </div>
+    <div class="editor">
+      <div class="form-group">
+        <label for="editor-name">Game name</label>
+        <input class="form-control" id="editor-name">
+      </div>
+      <div class="form-group">
+        <label for="editor-category">Category</label>
+        <input class="form-control" id="editor-category">
+      </div>
+      <table id="split-editor-table" class="table table-sm">
+        <thead>
+          <tr>
+            <th scope="col">
+                Segment Name
+            </th>
+            <th scope="col">
+                Time PB
+            </th>
+            <th scope="col">
+                Segment Gold
+            </th>
+            <th scope="col">
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td scope="col">
+            </td>
+            <td scope="col">
+            </td>
+            <td scope="col">
+            </td>
+            <td scope="col">
+              <span class="fas fa-plus-square plus-square editor-add" onclick="addEditorRow()"></span>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+      <div class="editor-save">
+        <button type="button" class="btn" onclick="saveRun(false);" id="btn-save">Save</button>
+        <button type="button" class="btn" onclick="saveRun(true);" id="btn-save-new">Save as...</button>
+        <div class="form-group">
+          <input class="form-control" placeholder="" id="input-save-new">
+        </div>
+        <button type="button" class="btn btn-danger" onclick="deleteRun();" id="btn-delete">Delete</button>
+      </div>
+    </div>
   </div>
-  <div class="form-check">
-    <input class="form-check-input" type="checkbox" value="" id="chk-save-pb">
-    <label class="form-check-label" for="chk-save-pb">
-      Save PB run on reset
-    </label>
-  </div>
-  <button disabled type="button" class="btn" onclick="scrollSegmentList('up');" id="btn-scroll-up">Up (q)</button>
-  <button disabled type="button" class="btn" onclick="scrollSegmentList('down');" id="btn-scroll-down">Down (a)</button>
 </body>
 </html>

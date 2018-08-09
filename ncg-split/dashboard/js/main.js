@@ -1,3 +1,5 @@
+const EDITOR_SEGMENT_ROW = '<tr><td scope="col"><div class="form-group editor-segment-form"><input class="form-control" placeholder=""></div></td><td scope="col"><div class="form-group editor-segment-form"><input class="form-control" placeholder=""></div></td><td scope="col"><div class="form-group editor-segment-form"><input class="form-control" placeholder=""></div></td><td scope="col"><span class="fas fa-minus-square minus-square editor-remove"></span></td></tr>';
+
 const KEYSTROKE_START_SPLIT = " ".charCodeAt(0);
 const KEYSTROKE_RESET = "z".charCodeAt(0);
 const KEYSTROKE_SCROLL_UP = "q".charCodeAt(0);
@@ -7,6 +9,47 @@ let runObject = {
   state : "UNLOADED"
 };
 
+const runState = nodecg.Replicant("ncgsplit-run-state");
+runState.on("change", newValue => {
+  if ("READY" === newValue) {
+    toggleButtonEnable("btn-timer-start", "enable");
+    toggleButtonEnable("btn-scroll-up", "enable");
+    toggleButtonEnable("btn-scroll-down", "enable");
+    toggleButtonEnable("btn-timer-split", "disable");
+    toggleButtonEnable("btn-timer-reset", "disable");
+    toggleButtonEnable("btn-save", "enable");
+    toggleButtonEnable("btn-save-new", "enable");
+    toggleButtonEnable("btn-delete", "enable", "btn-danger");
+  } else if ("RUNNING" === newValue) {
+    toggleButtonEnable("btn-timer-start", "disable");
+    toggleButtonEnable("btn-timer-split", "enable");
+    toggleButtonEnable("btn-timer-reset", "enable");
+    toggleButtonEnable("btn-scroll-up", "disable");
+    toggleButtonEnable("btn-scroll-down", "disable");
+    toggleButtonEnable("btn-save", "disable");
+    toggleButtonEnable("btn-save-new", "disable");
+    toggleButtonEnable("btn-delete", "disable", "btn-danger");
+    $("#editor-header-hide").trigger("click");
+  } else if ("FINISHED" === newValue) {
+    toggleButtonEnable("btn-timer-start", "disable");
+    toggleButtonEnable("btn-timer-split", "enable");
+    toggleButtonEnable("btn-timer-reset", "enable");
+    toggleButtonEnable("btn-scroll-up", "enable");
+    toggleButtonEnable("btn-scroll-down", "enable");
+    toggleButtonEnable("btn-save", "enable");
+    toggleButtonEnable("btn-save-new", "enable");
+    toggleButtonEnable("btn-delete", "enable", "btn-danger");
+  } else if ("UNLOADED" === newValue) {
+    toggleButtonEnable("btn-timer-start", "disable");
+    toggleButtonEnable("btn-timer-split", "disable");
+    toggleButtonEnable("btn-timer-reset", "disable");
+    toggleButtonEnable("btn-scroll-up", "disable");
+    toggleButtonEnable("btn-scroll-down", "disable");
+    toggleButtonEnable("btn-save", "disable");
+    toggleButtonEnable("btn-save-new", "enable");
+    toggleButtonEnable("btn-delete", "disable", "btn-danger");
+  }
+});
 
 const runList = nodecg.Replicant("ncgsplit-run-list");
 runList.on("change", newValue => {
@@ -15,25 +58,193 @@ runList.on("change", newValue => {
     output.push('<option value="'+ newValue[i] +'">'+ newValue[i] +'</option>');
   }
   $('#run-search-list').html(output.join(''));
+  runObject.state = "UNLOADED";
+  runState.value = runObject.state;
 });
 
 function loadRunList() {
   nodecg.sendMessage('ncgsplit-load-run-list');
 }
 
-nodecg.listenFor("ncgsplit-run-loaded", runData => {
-  runObject = runData;
-  runObject.state = "READY";
-  nodecg.sendMessage('ncgsplit-run-ready', runObject);
-
-  toggleButtonEnable("btn-timer-start", "enable");
-  toggleButtonEnable("btn-scroll-up", "enable");
-  toggleButtonEnable("btn-scroll-down", "enable");
-});
-
 function loadRun() {
   let file = $('#run-search-list').find(":selected").text();
   nodecg.sendMessage('ncgsplit-load-run', file);
+}
+
+function initializeRun(updateEditor) {
+  runObject.state = "READY";
+  runState.value = runObject.state;
+  nodecg.sendMessage('ncgsplit-run-ready', runObject);
+
+  if (updateEditor) {
+    $("#editor-name").val(runObject.title);
+    $("#editor-category").val(runObject.category);
+
+    let tbodySelector = $("#split-editor-table tbody");
+    $(tbodySelector).html("");
+    let totalSegments = runObject.segments.length;
+    let totalRunTime = 0;
+    for (var i = 0; i < totalSegments; i++) {
+      let segment = runObject.segments[i];
+      $(tbodySelector).append(EDITOR_SEGMENT_ROW);
+      let row = tbodySelector.find("tr:nth-child("+(i+1)+")");
+      row.find('td:nth-child(1) input').val(segment.name);
+      totalRunTime += segment.timePb;
+      row.find('td:nth-child(2) input').val(timeToString(totalRunTime));
+      row.find('td:nth-child(3) input').val(timeToString(segment.timeGold));
+      row.find('td:nth-child(4) span').attr('onclick', 'removeEditorRow(this)');
+    }
+  }
+}
+
+nodecg.listenFor("ncgsplit-run-loaded", runData => {
+  runObject = runData;
+  initializeRun(true)
+});
+
+function deleteRun() {
+  if (!runObject.state === "READY") {
+    return;
+  }
+  nodecg.sendMessage("ncgsplit-run-delete", runObject.fileName);
+}
+
+function saveRun(asNew) {
+  if (!runObject.state === "READY") {
+    return;
+  }
+
+  let tempRunObject = validateEditor(asNew);
+  if (!tempRunObject) {
+    return;
+  }
+  console.log(tempRunObject);
+  runObject.title = tempRunObject.title;
+  runObject.category = tempRunObject.category;
+  runObject.segments = [];
+  for (var i in tempRunObject.segments) {
+    runObject.segments.push(tempRunObject.segments[i]);
+  }
+  runObject.totalTimePb = tempRunObject.totalTimePb;
+
+  if (asNew) {
+    runObject.fileName = tempRunObject.fileName + ".ncgrun";
+    runObject.attempts = 0;
+    runObject.completedAttempts = 0;
+  }
+  nodecg.sendMessage('ncgsplit-run-save', runObject);
+  initializeRun(false);
+}
+
+function validateEditor(asNew) {
+  let tempRunObject = {
+    "title" : "",
+    "category" : "",
+    "segments" : [],
+  }
+
+  // verify file name if the run is to be stored as a new file
+  if (asNew) {
+    let fileName = $("#input-save-new").val();
+    let nameRegexp = /^[a-zA-Z0-9]+$/
+    if (!fileName.match(nameRegexp)) {
+      $("#input-save-new").addClass("editor-error");
+    return;
+    }
+    tempRunObject.fileName = fileName;
+    $("#input-save-new").removeClass("editor-error");
+  }
+
+  // verify name and category
+  let title = $("#editor-name").val();
+  if (!title) {
+    $("#editor-name").addClass("editor-error");
+    return undefined;
+  }
+  $("#editor-name").removeClass("editor-error");
+  tempRunObject.title = title;
+
+  let category = $("#editor-category").val();
+  if (!category) {
+    $("#editor-category").addClass("editor-error");
+    return undefined;
+  }
+  $("#editor-category").removeClass("editor-error");
+  tempRunObject.category = category;
+
+  // verify each row
+  let trsSelector = $("#split-editor-table tbody tr");
+  let timePbPrev = 0;
+  let totalTimePb = 0;
+  $(trsSelector).each(function(i, row) {
+    let nameTd = $(row).find('td:nth-child(1) input');
+    let name = nameTd.val();
+    if (!name) {
+      nameTd.addClass("editor-error");
+      return undefined;
+    }
+    let timePbTd = $(row).find('td:nth-child(2) input');
+    let timePb = stringToTime(timePbTd.val());
+    totalTimePb = timePb;
+    if (timePb < 0) {
+      timePbTd.addClass("editor-error");
+      return undefined;
+    }
+    let timePbDelta = timePb - timePbPrev;
+    if (timePbDelta < 0) {
+      timePbTd.addClass("editor-error");
+      return undefined;
+    }
+    timePbPrev = timePb;
+    let timeGoldTd = $(row).find('td:nth-child(3) input');
+    let timeGold = stringToTime(timeGoldTd.val());
+    if (timeGold < 0 || (timeGold > timePbDelta)) {
+      timeGoldTd.addClass("editor-error");
+      return undefined;
+    }
+
+    nameTd.removeClass("editor-error");
+    timePbTd.removeClass("editor-error");
+    timeGoldTd.removeClass("editor-error");
+
+    tempRunObject.segments.push({
+      name : name,
+      timePb : timePbDelta,
+      timeGold : timeGold,
+      timeLive : 0
+    });
+  });
+  tempRunObject.totalTimePb = totalTimePb;
+  return tempRunObject;
+}
+
+function timeToString(time) {
+  time = Math.floor(time/100);
+  let tensOfSeconds = time % 10;
+  let seconds = Math.floor(time/10) % 60;
+  let secondsStr = (seconds < 10) ? ("0"+seconds) : seconds;
+  let minutes = Math.floor(time/600) % 60;
+  let minutesStr = (minutes < 10) ? ("0"+minutes) : minutes;
+
+  return minutesStr+":"+secondsStr+"."+tensOfSeconds;
+}
+
+function stringToTime(timeString) {
+  let timeRegexp = /^(\d+):(\d+)\.(\d)$/;
+  let isMatch = timeString.match(timeRegexp);
+  if (!isMatch) {
+    return -1;
+  }
+  let minutes = isMatch[1] * 60*1000;
+  let seconds = isMatch[2] * 1000;
+  if (seconds > 59000) {
+    return -1;
+  }
+  let tens = isMatch[3] * 100;
+  if (tens > 900) {
+    return -1;
+  }
+  return tens + seconds + minutes;
 }
 
 function timerStart() {
@@ -46,9 +257,7 @@ function timerStart() {
     nodecg.sendMessage('ncgsplit-run-start', runObject);
     nodecg.sendMessageToBundle('timerInfo', 'plpalotwitch', {"type":"RUN_START"});
 
-    toggleButtonEnable("btn-timer-start", "disable");
-    toggleButtonEnable("btn-timer-split", "enable");
-    toggleButtonEnable("btn-timer-reset", "enable");
+    runState.value = runObject.state;
   }
 }
 
@@ -81,13 +290,11 @@ function timerReset() {
           }
         }
       }
-      nodecg.sendMessage('ncgsplit-run-save', runObject);
     }
+    nodecg.sendMessage('ncgsplit-run-save', runObject);
     nodecg.sendMessage('ncgsplit-run-ready', runObject);
 
-    toggleButtonEnable("btn-timer-start", "enable");
-    toggleButtonEnable("btn-timer-split", "disable");
-    toggleButtonEnable("btn-timer-reset", "disable");
+    runState.value = runObject.state;
   }
 }
 
@@ -100,6 +307,7 @@ function timerSplit() {
       runObject.currentSegment++;
       if (runObject.currentSegment == runObject.segments.length) {
         runObject.state = "FINISHED";
+        runState.value = runObject.state;
         nodecg.sendMessageToBundle('timerInfo', 'plpalotwitch', {"type":"RUN_COMPLETED", "liveTime":runObject.totalTimeLive, "runTime":runObject.totalTimePb});
         nodecg.sendMessage('ncgsplit-run-finish', runObject);
       } else {
@@ -121,14 +329,44 @@ function scrollSegmentList(dir) {
   nodecg.sendMessage('ncgsplit-scroll-segment', dir);
 }
 
-function toggleButtonEnable(button, state) {
+function toggleButtonEnable(button, state, customClass) {
+  if (!customClass) {
+    customClass = "btn-primary";
+  }
   if ("enable" === state) {
       $("#"+button).attr("disabled", false);
-      $("#"+button).addClass("btn-primary");
+      $("#"+button).addClass(customClass);
   } else {
       $("#"+button).attr("disabled", true);
-      $("#"+button).removeClass("btn-primary");
+      $("#"+button).removeClass(customClass);
   }
+}
+
+function toggleEditor(show) {
+  if (show) {
+    $(".editor").css("display", "inline-block");
+    $("#editor-header-hide").show();
+    $("#editor-header-show").hide();
+  } else {
+    $(".editor").hide();
+    $("#editor-header-hide").hide();
+    $("#editor-header-show").show();
+  }
+}
+
+function addEditorRow() {
+  let tbodySelector = $("#split-editor-table tbody");
+  $(tbodySelector).append(EDITOR_SEGMENT_ROW);
+
+  let rowCount = $("#split-editor-table tbody tr").length;
+
+  let row = tbodySelector.find("tr:nth-child("+(rowCount)+")");
+  row.find('td:nth-child(4) span').attr('onclick', 'removeEditorRow(this)');
+}
+
+function removeEditorRow(elem) {
+  let parent = $(elem).parents("tr");
+  parent.remove();
 }
 
 nodecg.listenFor('ncgsplit-ext-split', () => {
@@ -140,6 +378,10 @@ nodecg.listenFor('ncgsplit-ext-reset', () => {
 });
 
 $(document).on("keypress", function (e) {
+    // Ignore keypresses when editor is open
+    if ($(".editor").is(":visible")) {
+      return;
+    }
     switch (e.which) {
       case KEYSTROKE_START_SPLIT :
         if (runObject.state === "READY") {
@@ -158,4 +400,8 @@ $(document).on("keypress", function (e) {
         scrollSegmentList('down');
         break;
     }
+});
+
+$(document).ready(function() {
+  loadRunList();
 });
