@@ -39,5 +39,8 @@
       }
     ]
   },
-  "license": "GPL-3.0"
+  "license": "GPL-3.0",
+  "dependencies": {
+    "onoff": "^3.2.1"
+  }
 }

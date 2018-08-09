@@ -131,6 +131,14 @@ function toggleButtonEnable(button, state) {
   }
 }
 
+nodecg.listenFor('ncgsplit-ext-split', () => {
+	$(document).event.trigger({type : 'keypress', which : KEYSTROKE_START_SPLIT});
+});
+
+nodecg.listenFor('ncgsplit-ext-reset', () => {
+	$(document).event.trigger({type : 'keypress', which : KEYSTROKE_RESET});
+});
+
 $(document).on("keypress", function (e) {
     switch (e.which) {
       case KEYSTROKE_START_SPLIT :
