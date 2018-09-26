@@ -13,7 +13,9 @@ function switchTransparent(onOff) {
   transparent.value = onOff;
 };
 
+const twitchUsername = nodecg.Replicant('twitchUsername', {defaultValue: 'pawelpredki'});
 function updateFollowers() {
+  twitchUsername.value = $("#followers-user").val();
   nodecg.sendMessage('updateFollowers');
 }
 

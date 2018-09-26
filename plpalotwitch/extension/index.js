@@ -98,8 +98,8 @@ module.exports = nodecg => {
 
 	nodecg.listenFor('updateLeaderboards', setupLeaderboards);
 
+	const twitchUsername = nodecg.Replicant('twitchUsername', {defaultValue: 'pawelpredki'});
 	const loadFollowers = () => {
-		const twitchUsername = nodecg.Replicant('twitchUsername', {defaultValue: 'plpalo'});
   	const requestUri = encodeURI(PHPROOT + "followers.php?user="+twitchUsername.value);
   	request( requestUri, {json: true}, (err, res, body) => {
 			if (err) {
