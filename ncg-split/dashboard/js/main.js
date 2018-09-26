@@ -369,6 +369,14 @@ function removeEditorRow(elem) {
   parent.remove();
 }
 
+nodecg.listenFor('ncgsplit-ext-split', () => {
+	$(document).event.trigger({type : 'keypress', which : KEYSTROKE_START_SPLIT});
+});
+
+nodecg.listenFor('ncgsplit-ext-reset', () => {
+	$(document).event.trigger({type : 'keypress', which : KEYSTROKE_RESET});
+});
+
 $(document).on("keypress", function (e) {
     // Ignore keypresses when editor is open
     if ($(".editor").is(":visible")) {
