@@ -17,6 +17,7 @@ nodecg.listenFor('ncgsplit-run-ready', run => {
 
   let totalRunTime = 0;
   let sumOfBest = 0;
+  let showSumOfBest = true;
   let totalSegments = run.segments.length;
   $("#ncgsplit-segment-table-id").html("");
   for (var i = 0 ; i < totalSegments ; i++) {
@@ -24,7 +25,13 @@ nodecg.listenFor('ncgsplit-run-ready', run => {
     let segment = run.segments[i];
     let row = $(".ncgsplit-segment-table tr:nth-child("+(i+1)+")");
     totalRunTime += segment.timePb;
-    sumOfBest += segment.timeGold;
+    if (showSumOfBest) {
+      if (segment.timeGold > 0) {
+        sumOfBest += segment.timeGold;
+      } else {
+        showSumOfBest = false;
+      }
+    }
 
     row.find('td:nth-child(2) span').text(segment.name);
     row.find('td:nth-child(3) span').text("");
@@ -39,8 +46,8 @@ nodecg.listenFor('ncgsplit-run-ready', run => {
     $("#ncgsplit-segment-table-id").append(SPLIT_ROW);
   }
 
-  if (0 == sumOfBest) {
-    $(".ncgsplit-sob").hide();
+  if (!showSumOfBest) {
+    $("#ncgsplit-sob-timer-id").text("--:--");
   } else {
     displayTime($("#ncgsplit-sob-timer-id"), sumOfBest);
   }

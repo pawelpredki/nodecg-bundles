@@ -79,7 +79,7 @@ function initializeRun(updateEditor) {
   if (updateEditor) {
     $("#editor-name").val(runObject.title);
     $("#editor-category").val(runObject.category);
-    $("#split-start-offset").val(runObject.startOffset ? runObject.startOffset : "0:00.0");
+    $("#split-start-offset").val(runObject.startOffset ? timeToString(runObject.startOffset) : "0:00.0");
 
     let tbodySelector = $("#split-editor-table tbody");
     $(tbodySelector).html("");
