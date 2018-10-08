@@ -1,4 +1,4 @@
-const EDITOR_SEGMENT_ROW = '<tr><td scope="col"><div class="form-group editor-segment-form"><input class="form-control" placeholder=""></div></td><td scope="col"><div class="form-group editor-segment-form"><input class="form-control" placeholder=""></div></td><td scope="col"><div class="form-group editor-segment-form"><input class="form-control" placeholder=""></div></td><td scope="col"><span class="fas fa-minus-square minus-square editor-remove"></span></td></tr>';
+const EDITOR_SEGMENT_ROW = '<tr><td scope="col"><div class="form-group editor-segment-form"><input class="form-control" placeholder=""></div></td><td scope="col"><div class="form-group editor-segment-form"><input class="form-control" placeholder=""></div></td><td scope="col"><div class="form-group editor-segment-form"><input class="form-control" placeholder=""></div></td><td scope="col"><span class="fas fa-minus-square minus-square editor-remove"></span><span class="fas fa-angle-up angle-up editor-remove"></span><span class="fas fa-angle-down angle-down editor-remove"></span></td></tr>';
 
 const KEYSTROKE_START_SPLIT = " ".charCodeAt(0);
 const KEYSTROKE_RESET = "z".charCodeAt(0);
@@ -93,8 +93,37 @@ function initializeRun(updateEditor) {
       totalRunTime += segment.timePb;
       row.find('td:nth-child(2) input').val(timeToString(totalRunTime));
       row.find('td:nth-child(3) input').val(timeToString(segment.timeGold));
-      row.find('td:nth-child(4) span').attr('onclick', 'removeEditorRow(this)');
+      row.find('td:nth-child(4) span:nth-child(1)').attr('onclick', 'removeEditorRow(this)');
+      if (0 == i) {
+        row.find('td:nth-child(4) span:nth-child(2)').hide();
+      } else {
+        row.find('td:nth-child(4) span:nth-child(2)').attr('onclick', 'moveUpEditorRow(' + i + ')');
+      }
+      if ((totalSegments-1) == i) {
+        row.find('td:nth-child(4) span:nth-child(3)').hide();
+      } else {
+        row.find('td:nth-child(4) span:nth-child(3)').attr('onclick', 'moveDownEditorRow(' + i + ')');
+      }
     }
+  }
+}
+
+function moveUpEditorRow(index) {
+  if (index > 0) {
+    let temp = runObject.segments[index-1];
+    runObject.segments[index-1] = runObject.segments[index];
+    runObject.segments[index] = temp;
+    initializeRun(true);
+  }
+
+}
+
+function moveDownEditorRow(index) {
+  if (index < (runObject.segments.length-1)) {
+    let temp = runObject.segments[index+1];
+    runObject.segments[index+1] = runObject.segments[index];
+    runObject.segments[index] = temp;
+    initializeRun(true);
   }
 }
 
