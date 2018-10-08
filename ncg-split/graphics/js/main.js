@@ -9,7 +9,7 @@ nodecg.listenFor('ncgsplit-run-ready', run => {
   console.log(run);
   if (timerInterval > -1) {
     clearInterval(timerInterval);
-    displayTime($("#ncgsplit-main-timer-id"), 0);
+    displayTime($("#ncgsplit-main-timer-id"), run.startOffset ? -1*run.startOffset : 0);
   }
   $("#ncgsplit-game-title-id").text(run.title);
   $("#ncgsplit-game-category-id").text(run.category);
@@ -48,8 +48,9 @@ nodecg.listenFor('ncgsplit-run-ready', run => {
 
 nodecg.listenFor('ncgsplit-run-start', run => {
   startTime = run.startTime;
+  startOffset = run.startOffset ? run.startOffset : 0;
   timerInterval = setInterval(function() {
-      var elapsedTime = Date.now() - startTime;
+      var elapsedTime = Date.now() - startTime - startOffset;
       displayTime($("#ncgsplit-main-timer-id"), elapsedTime);
   }, 50);
 });
@@ -80,16 +81,16 @@ const splitSegment = function(run) {
   let segmentDiff = timeLive - timePb;
   let totalDiff = totalRunTime - totalTimePb;
   let style = "";
-  if (goldDiff < 0) {
+  if (timeGold == 0 || goldDiff < 0) {
     style = "gold";
   } else if (totalDiff < 0) {
-    if (segmentDiff < 0) {
+    if (timePb == 0 || segmentDiff < 0) {
       style = "blue";
     } else {
       style = "badblue";
     }
   } else {
-    if (segmentDiff < 0) {
+    if (timePb == 0 || segmentDiff < 0) {
       style = "goodred";
     } else {
       style = "red";

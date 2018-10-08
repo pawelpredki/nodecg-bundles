@@ -39,7 +39,7 @@
   "repository": "https://github.com/nodecg/nodecg.git",
   "license": "GPL-3.0",
   "dependencies": {
-    "request": "^2.87.0",
+    "request": "^2.88.0",
     "rest-handler": "^1.2.17"
   }
 }

@@ -79,6 +79,7 @@ function initializeRun(updateEditor) {
   if (updateEditor) {
     $("#editor-name").val(runObject.title);
     $("#editor-category").val(runObject.category);
+    $("#split-start-offset").val(runObject.startOffset ? runObject.startOffset : "0:00.0");
 
     let tbodySelector = $("#split-editor-table tbody");
     $(tbodySelector).html("");
@@ -140,6 +141,7 @@ function validateEditor(asNew) {
   let tempRunObject = {
     "title" : "",
     "category" : "",
+    "startOffset" : 0,
     "segments" : [],
   }
 
@@ -171,6 +173,16 @@ function validateEditor(asNew) {
   }
   $("#editor-category").removeClass("editor-error");
   tempRunObject.category = category;
+
+  // verify start offset
+  $("#split-start-offset").addClass("editor-error")
+  let startOffsetStr = $("#split-start-offset").val();
+  let startOffset = stringToTime(timePbTd.val());
+  if (startOffset < 0) {
+    $("#split-start-offset").addClass("editor-error");
+  } else {
+    tempRunObject.startOffset = startOffset;
+  }
 
   // verify each row
   let trsSelector = $("#split-editor-table tbody tr");
@@ -219,6 +231,9 @@ function validateEditor(asNew) {
 }
 
 function timeToString(time) {
+  if (0 == time) {
+    return "";
+  }
   time = Math.floor(time/100);
   let tensOfSeconds = time % 10;
   let seconds = Math.floor(time/10) % 60;
@@ -230,6 +245,9 @@ function timeToString(time) {
 }
 
 function stringToTime(timeString) {
+  if (timeString === "") {
+    return 0;
+  }
   let timeRegexp = /^(\d+):(\d+)\.(\d)$/;
   let isMatch = timeString.match(timeRegexp);
   if (!isMatch) {
@@ -302,7 +320,7 @@ function timerSplit() {
   let splitTime = Date.now();
   if ("RUNNING" == runObject.state) {
     if (runObject.currentSegment < runObject.segments.length) {
-      runObject.segments[runObject.currentSegment].timeLive = splitTime - runObject.startTime - runObject.totalTimeLive;
+      runObject.segments[runObject.currentSegment].timeLive = splitTime - runObject.startTime - runObject.totalTimeLive - runObject.startOffset ? runObject.startOffset : 0;
       runObject.totalTimeLive += runObject.segments[runObject.currentSegment].timeLive;
       runObject.currentSegment++;
       if (runObject.currentSegment == runObject.segments.length) {
