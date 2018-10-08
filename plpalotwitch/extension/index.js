@@ -6,7 +6,7 @@ const server = require('http').createServer();
 
 module.exports = nodecg => {
 
-	const PHPROOT = "http://localhost/srcom/php/";
+	const PHPROOT = "http://192.168.0.108/srcom/php/";
 
   // Routes
   restHandler.addRoute({

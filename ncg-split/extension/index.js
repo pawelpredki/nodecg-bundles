@@ -9,6 +9,7 @@ module.exports = nodecg => {
 	if (Gpio.accessible) {
 		const splitButton = new Gpio(2, 'in', 'rising', {debounceTimeout:10});
 		splitButton.watch((err, value) => {
+			console.log("press 2");
 			if (err) {
 				return;
 			}
@@ -17,6 +18,7 @@ module.exports = nodecg => {
 	
 		const resetButton = new Gpio(3, 'in', 'rising', {debounceTimeout:10});
 		resetButton.watch((err, value) => {
+			console.log("press 3");
 			if (err) {
 				return;
 			}
