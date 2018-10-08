@@ -173,7 +173,7 @@ nodecg.listenFor('timerInfo', message => {
     break;
 
     case 'RUN_COMPLETED':
-      if (message.liveTime < message.runTime) {
+      if ((0 == message.runTime)  || (message.liveTime < message.runTime)) {
         personalBestActive.value = true;
       }
     break;

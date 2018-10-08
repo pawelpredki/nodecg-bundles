@@ -122,6 +122,7 @@ function saveRun(asNew) {
   console.log(tempRunObject);
   runObject.title = tempRunObject.title;
   runObject.category = tempRunObject.category;
+  runObject.startOffset = tempRunObject.startOffset;
   runObject.segments = [];
   for (var i in tempRunObject.segments) {
     runObject.segments.push(tempRunObject.segments[i]);
@@ -175,9 +176,9 @@ function validateEditor(asNew) {
   tempRunObject.category = category;
 
   // verify start offset
-  $("#split-start-offset").addClass("editor-error")
+  $("#split-start-offset").removeClass("editor-error")
   let startOffsetStr = $("#split-start-offset").val();
-  let startOffset = stringToTime(timePbTd.val());
+  let startOffset = stringToTime(startOffsetStr);
   if (startOffset < 0) {
     $("#split-start-offset").addClass("editor-error");
   } else {
@@ -291,7 +292,7 @@ function timerReset() {
     runObject.attempts = runObject.attempts + 1;
     if ($("#chk-save-gold").is(":checked")) {
       for (var i = 0; i < currentSegmentTemp; i++) {
-        if (runObject.segments[i].timeLive < runObject.segments[i].timeGold) {
+        if ((0 == runObject.segments[i].timeGold) || (runObject.segments[i].timeLive < runObject.segments[i].timeGold)) {
           console.log("Update gold for segment <" + i + ">");
           runObject.segments[i].timeGold = runObject.segments[i].timeLive;
         }
@@ -300,7 +301,7 @@ function timerReset() {
     if ("FINISHED" == currentState) {
       runObject.completedAttempts = runObject.completedAttempts + 1;
       if ($("#chk-save-pb").is(":checked")) {
-        if (totalTimeLiveTemp < runObject.totalTimePb) {
+        if ((0 == runObject.totalTimePb) || (totalTimeLiveTemp < runObject.totalTimePb)) {
           runObject.totalTimePb = totalTimeLiveTemp;
           for (var i in runObject.segments) {
             console.log("Update PB time for segment <" + i + ">");
@@ -320,7 +321,7 @@ function timerSplit() {
   let splitTime = Date.now();
   if ("RUNNING" == runObject.state) {
     if (runObject.currentSegment < runObject.segments.length) {
-      runObject.segments[runObject.currentSegment].timeLive = splitTime - runObject.startTime - runObject.totalTimeLive - runObject.startOffset ? runObject.startOffset : 0;
+      runObject.segments[runObject.currentSegment].timeLive = splitTime - runObject.startTime - runObject.totalTimeLive - (runObject.startOffset ? runObject.startOffset : 0);
       runObject.totalTimeLive += runObject.segments[runObject.currentSegment].timeLive;
       runObject.currentSegment++;
       if (runObject.currentSegment == runObject.segments.length) {
@@ -331,10 +332,10 @@ function timerSplit() {
       } else {
         let message = {
           "type" : "SEGMENT",
-          "segmentNo" : runObject.currentSegment+1,
+          "segmentNo" : runObject.currentSegment,
           "segmentTotal" : runObject.segments.length,
-          "bestDelta" : runObject.segments[runObject.currentSegment-1].timeLive - runObject.segments[runObject.currentSegment-1].timeGold,
-          "runDelta" : runObject.segments[runObject.currentSegment-1].timeLive - runObject.segments[runObject.currentSegment-1].timePb
+          "bestDelta" : (0 == runObject.segments[runObject.currentSegment-1].timeGold) ? -1 : (runObject.segments[runObject.currentSegment-1].timeLive - runObject.segments[runObject.currentSegment-1].timeGold),
+          "runDelta" : (0 == runObject.segments[runObject.currentSegment-1].timePb) ? -1 : (runObject.segments[runObject.currentSegment-1].timeLive - runObject.segments[runObject.currentSegment-1].timePb)
         }
         nodecg.sendMessageToBundle('timerInfo', 'plpalotwitch', message);
         nodecg.sendMessage('ncgsplit-run-split', runObject);

@@ -83,7 +83,7 @@ const splitSegment = function(run) {
   let style = "";
   if (timeGold == 0 || goldDiff < 0) {
     style = "gold";
-  } else if (totalDiff < 0) {
+  } else if (totalDiff == 0 || totalDiff < 0) {
     if (timePb == 0 || segmentDiff < 0) {
       style = "blue";
     } else {
