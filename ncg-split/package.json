@@ -41,6 +41,8 @@
   },
   "license": "GPL-3.0",
   "dependencies": {
+    "config": "^3.0.0",
+    "obs-websocket-js": "^1.2.0",
     "onoff": "^3.2.2"
   }
 }
