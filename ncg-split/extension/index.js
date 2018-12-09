@@ -86,6 +86,18 @@ module.exports = nodecg => {
 				}
 			});
 		});
+
+		obs.on('ConnectionOpened', (data) => {
+			const micSource = config.get('obsConnection.micSource');
+			obs.send('GetMute', {'source':micSource}, (err, data) => {
+				if (!err) {
+					const muted = data.muted;
+					ledThree.writeSync(muted ? 0 : 1);
+				} else {
+					console.log("OBS Error: " + err);
+				}
+			});
+		});
 	} else {
 		console.log("Gpio not available on this system");
 	}
