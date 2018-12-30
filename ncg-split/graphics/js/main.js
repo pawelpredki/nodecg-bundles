@@ -1,9 +1,21 @@
 const MAX_ROWS = 8;
 const ROWS_KEEP = 4;
 const SPLIT_ROW = '<tr><td class="ncgsplit-segment-table-icon"><img src=""/></td><td class="ncgsplit-segment-table-name"><span></span></td><td class="ncgsplit-segment-table-split"><span></span></td><td class="ncgsplit-segment-table-time"><span></span></td></tr>';
+const SPLIT_ROW_WIDE = '<tr><td class="ncgsplit-segment-table-icon wide"><img src=""/></td><td class="ncgsplit-segment-table-name wide"><span></span></td><td class="ncgsplit-segment-table-split wide"><span></span></td><td class="ncgsplit-segment-table-segment-time wide"><span></span></td><td class="ncgsplit-segment-table-time wide"><span></span></td></tr>';
 
 let startTime = 0;
 let timerInterval = -1;
+let wideMode = true;
+
+nodecg.Replicant('wideMode').on('change', (newValue, oldValue) => {
+  wideMode = newValue;
+  if (newValue) {
+    $(".ncgsplit-parent").addClass("wide");
+  } else {
+    $(".ncgsplit-parent").removeClass("wide");
+  }
+});
+
 
 nodecg.listenFor('ncgsplit-run-ready', run => {
   console.log(run);
@@ -21,7 +33,7 @@ nodecg.listenFor('ncgsplit-run-ready', run => {
   let totalSegments = run.segments.length;
   $("#ncgsplit-segment-table-id").html("");
   for (var i = 0 ; i < totalSegments ; i++) {
-    $("#ncgsplit-segment-table-id").append(SPLIT_ROW);
+    $("#ncgsplit-segment-table-id").append(wideMode ? SPLIT_ROW_WIDE : SPLIT_ROW);
     let segment = run.segments[i];
     let row = $(".ncgsplit-segment-table tr:nth-child("+(i+1)+")");
     totalRunTime += segment.timePb;
@@ -36,14 +48,20 @@ nodecg.listenFor('ncgsplit-run-ready', run => {
     row.find('td:nth-child(2) span').text(segment.name);
     row.find('td:nth-child(3) span').text("");
     row.find('td:nth-child(3) span').removeClass();
-    displayTime(row.find('td:nth-child(4) span'), totalRunTime);
-    row.find('td:nth-child(4) span').removeClass();
+    const totalTimeIndex = wideMode ? 5 : 4;
+    displayTime(row.find('td:nth-child('+totalTimeIndex+') span'), totalRunTime);
+    row.find('td:nth-child('+totalTimeIndex+') span').removeClass();
+    // If 'wide' we add another column
+    if (wideMode) {
+      row.find('td:nth-child(4) span').text("");
+      row.find('td:nth-child(4) span').removeClass();
+    }
     if (i >= MAX_ROWS) {
       row.hide();
     }
   }
   for (var i = totalSegments; i < MAX_ROWS; i++) {
-    $("#ncgsplit-segment-table-id").append(SPLIT_ROW);
+    $("#ncgsplit-segment-table-id").append(wideMode ? SPLIT_ROW_WIDE : SPLIT_ROW);
   }
 
   if (!showSumOfBest) {
@@ -106,8 +124,13 @@ const splitSegment = function(run) {
 
   displayTime(row.find('td:nth-child(3) span'), totalDiff);
   row.find('td:nth-child(3) span').addClass(style);
-  displayTime(row.find('td:nth-child(4) span'), totalRunTime);
-  row.find('td:nth-child(4) span').addClass(style);
+  const totalTimeIndex = wideMode ? 5 : 4;
+  displayTime(row.find('td:nth-child('+totalTimeIndex+') span'), totalRunTime);
+  row.find('td:nth-child('+totalTimeIndex+') span').addClass(style);
+  if (wideMode) {
+    displayTime(row.find('td:nth-child(4) span'), timeLive);
+    row.find('td:nth-child(4) span').addClass(style);
+  }
 
   // Check if we need to scroll segment list
   let totalSegments = run.segments.length;

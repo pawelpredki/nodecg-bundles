@@ -13,6 +13,21 @@ function switchTransparent(onOff) {
   transparent.value = onOff;
 };
 
+const wideMode = nodecg.Replicant('wideMode', {defaultValue: false});
+wideMode.on("change", newValue => {
+  if (newValue) {
+    $("#wide-off").removeClass("disabled");
+    $("#wide-on").addClass("disabled");
+  } else {
+    $("#wide-on").removeClass("disabled");
+    $("#wide-off").addClass("disabled");
+  }
+});
+
+function switchWideMode(onOff) {
+  wideMode.value = onOff;
+};
+
 const twitchUsername = nodecg.Replicant('twitchUsername', {defaultValue: 'pawelpredki'});
 function updateFollowers() {
   twitchUsername.value = $("#followers-user").val();

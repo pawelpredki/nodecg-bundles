@@ -10,16 +10,16 @@
 }
 
 .follower {
-  width: 300px;
+  width: 450px;
 }
 
 .leaderboard {
-  width: 400px;
+  width: 450px;
 }
 
 .message {
   float: left;
-  width: 570px;
+  width: 375px;
   margin-left: 5px;
 }
 
@@ -95,4 +95,9 @@
   height: 360px;
   bottom: 0px;
   left: 250px;
+}
+
+#ncg-split-iframe.wide {
+  width: 450px;
+  left: 5px;
 }

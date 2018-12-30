@@ -73,6 +73,10 @@ td {
   width: 40%;
 }
 
+.ncgsplit-segment-table-name.wide {
+  width: 40%;
+}
+
 .ncgsplit-segment-table-name > span {
   position: relative;
   left: 5px;
@@ -80,6 +84,10 @@ td {
 
 .ncgsplit-segment-table-split {
   width: 30%;
+}
+
+.ncgsplit-segment-table-split.wide {
+  width: 20%;
 }
 
 .ncgsplit-segment-table-split > span {
@@ -91,7 +99,21 @@ td {
   width: 30%;
 }
 
+.ncgsplit-segment-table-time.wide {
+  width: 20%;
+}
+
 .ncgsplit-segment-table-time > span {
+  position: relative;
+  float: right;
+  right: 2px;
+}
+
+.ncgsplit-segment-table-segment-time {
+  width: 20%;
+}
+
+.ncgsplit-segment-table-segment-time > span {
   position: relative;
   float: right;
   right: 2px;
@@ -104,7 +126,10 @@ td {
   width : 260px;
   height : 360px;
   background-color: black;
+}
 
+.ncgsplit-parent.wide {
+ width : 440px;
 }
 
 .ncgsplit-top-bar {

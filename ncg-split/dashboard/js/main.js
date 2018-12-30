@@ -5,6 +5,22 @@ const KEYSTROKE_RESET = "z".charCodeAt(0);
 const KEYSTROKE_SCROLL_UP = "q".charCodeAt(0);
 const KEYSTROKE_SCROLL_DOWN = "a".charCodeAt(0);
 
+const wideMode = nodecg.Replicant('wideMode', {defaultValue: false});
+wideMode.on("change", newValue => {
+  if (newValue) {
+    $("#wide-off").removeClass("disabled");
+    $("#wide-on").addClass("disabled");
+  } else {
+    $("#wide-on").removeClass("disabled");
+    $("#wide-off").addClass("disabled");
+  }
+});
+
+function switchWideMode(onOff) {
+  wideMode.value = onOff;
+};
+
+
 let runObject = {
   state : "UNLOADED"
 };

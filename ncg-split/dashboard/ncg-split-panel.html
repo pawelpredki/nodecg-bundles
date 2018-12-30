@@ -43,6 +43,11 @@
     <button disabled type="button" class="btn" onclick="scrollSegmentList('down');" id="btn-scroll-down">Down (a)</button>
   </div>
   <div class="section">
+    <h3>Mode</h3>
+    <button type="button" class="btn btn-primary" onclick="switchWideMode(true)" id="wide-on">Wide On</button>
+    <button type="button" class="btn btn-primary disabled" onclick="switchWideMode(false)" id="wide-off">Wide Off</button>
+  </div>
+  <div class="section">
     <div class="editor-header">
       <h3>Editor</h3>
       <span class="fas fa-eye eye" onclick="toggleEditor(true)" id="editor-header-show"></span>
@@ -103,5 +108,6 @@
       </div>
     </div>
   </div>
+
 </body>
 </html>

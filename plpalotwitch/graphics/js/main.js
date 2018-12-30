@@ -1,3 +1,11 @@
+nodecg.Replicant('wideMode').on('change', (newValue, oldValue) => {
+  if (newValue) {
+    $("#ncg-split-iframe").addClass("wide");
+  } else {
+    $("#ncg-split-iframe").removeClass("wide");
+  }
+});
+
 nodecg.Replicant('transparent').on('change', (newValue, oldValue) => {
   if (newValue) {
     $(".parent").css('background-color', 'transparent');
