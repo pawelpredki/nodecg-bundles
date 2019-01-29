@@ -61,7 +61,7 @@ module.exports = nodecg => {
 			}
 			nodecg.sendMessage('ncgsplit-ext-split');
 		});
-	
+
 		const resetButton = new Gpio(3, 'in', 'rising', {debounceTimeout:10});
 		resetButton.watch((err, value) => {
 			console.log("press 3");
@@ -132,6 +132,17 @@ module.exports = nodecg => {
 		console.log("Delete: " + file);
 		fs.unlinkSync(__dirname + '/runs/' + file);
 		loadRunList();
+	});
+
+	nodecg.listenFor('ncgsplit-ext-reset', () => {
+		const pbSource = config.get('obsConnection.pbSource');
+		obs.send('ResetSceneItem', {'item':pbSource}, (err, data) => {
+			if (!err) {
+				console.log("OBS Source restarted");
+			} else {
+				console.log("OBS Error: " + err);
+			}
+		});
 	});
 
 	const loadRunList = function() {

@@ -449,6 +449,7 @@ $(document).on("keypress", function (e) {
     switch (e.which) {
       case KEYSTROKE_START_SPLIT :
         if (runObject.state === "READY") {
+          nodecg.sendMessage('ncgsplit-timer-start');
           timerStart();
         } else if (runObject.state === "RUNNING") {
           timerSplit();
