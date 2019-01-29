@@ -3,6 +3,6 @@
 		"address": "192.168.0.108:4444",
 		"password": "",
 		"micSource": "Mic/Aux",
-		"pbSoruce": "Previous PB"
+		"pbSource": "Previous PB"
 	}
 }

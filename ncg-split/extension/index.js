@@ -134,7 +134,7 @@ module.exports = nodecg => {
 		loadRunList();
 	});
 
-	nodecg.listenFor('ncgsplit-ext-reset', () => {
+	nodecg.listenFor('ncgsplit-timer-start', () => {
 		const pbSource = config.get('obsConnection.pbSource');
 		obs.send('ResetSceneItem', {'item':pbSource}, (err, data) => {
 			if (!err) {
