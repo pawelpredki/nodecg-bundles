@@ -43,10 +43,18 @@ module.exports = obs;
 
 module.exports = nodecg => {
 
+	let lastSplit = Date.now();
+
 	// pull-down must be configured manually
 	if (Gpio.accessible) {
 		const splitButton = new Gpio(2, 'in', 'rising', {debounceTimeout:10});
 		splitButton.watch((err, value) => {
+			let nowSplit = Date.now();
+			if ((nowSplit - lastSplit) < 2000) {
+				console.log("soft debounce");
+				return;
+			}
+			lastSplit = nowSplit;
 			console.log("press 2");
 			if (err) {
 				return;
