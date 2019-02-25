@@ -164,7 +164,7 @@ function saveRun(asNew) {
   if (!tempRunObject) {
     return;
   }
-  console.log(tempRunObject);
+  console.log("SAVE RUN" + tempRunObject);
   runObject.title = tempRunObject.title;
   runObject.category = tempRunObject.category;
   runObject.startOffset = tempRunObject.startOffset;
@@ -286,32 +286,41 @@ function timeToString(time) {
   let secondsStr = (seconds < 10) ? ("0"+seconds) : seconds;
   let minutes = Math.floor(time/600) % 60;
   let minutesStr = (minutes < 10) ? ("0"+minutes) : minutes;
+  let hours = Math.floor(time/36000) % 60;
+  let hoursStr = (hours < 10) ? ("0" + hours) : hours;
 
-  return minutesStr+":"+secondsStr+"."+tensOfSeconds;
+  let res = "";
+  if (hours > 0) {
+    res = hoursStr+":";
+  }
+  return res+minutesStr+":"+secondsStr+"."+tensOfSeconds;
 }
 
 function stringToTime(timeString) {
+  console.log(timeString);
   if (timeString === "") {
     return 0;
   }
-  let timeRegexp = /^(\d+):(\d+)\.(\d)$/;
+  let timeRegexp = /^((\d+):)?(\d+):(\d+)\.(\d)$/;
   let isMatch = timeString.match(timeRegexp);
   if (!isMatch) {
     return -1;
   }
-  let minutes = isMatch[1] * 60*1000;
-  let seconds = isMatch[2] * 1000;
+  let hours = isMatch[2] ? (isMatch[2] * 60*60*1000) : 0;
+  let minutes = isMatch[3] * 60*1000;
+  let seconds = isMatch[4] * 1000;
   if (seconds > 59000) {
     return -1;
   }
-  let tens = isMatch[3] * 100;
+  let tens = isMatch[5] * 100;
   if (tens > 900) {
     return -1;
   }
-  return tens + seconds + minutes;
+  return tens + seconds + minutes + hours;
 }
 
 function timerStart() {
+  console.log("timer start");
   let startTime = Date.now();
   if ("READY" === runObject.state) {
     runObject.state = "RUNNING";
@@ -449,6 +458,7 @@ $(document).on("keypress", function (e) {
     switch (e.which) {
       case KEYSTROKE_START_SPLIT :
         if (runObject.state === "READY") {
+console.log("keypress split");
           nodecg.sendMessage('ncgsplit-timer-start');
           timerStart();
         } else if (runObject.state === "RUNNING") {

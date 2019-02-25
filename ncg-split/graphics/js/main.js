@@ -20,6 +20,7 @@ nodecg.Replicant('wideMode').on('change', (newValue, oldValue) => {
 nodecg.listenFor('ncgsplit-run-ready', run => {
   console.log(run);
   if (timerInterval > -1) {
+    console.log("Clear interval");
     clearInterval(timerInterval);
     displayTime($("#ncgsplit-main-timer-id"), run.startOffset ? -1*run.startOffset : 0);
   }
@@ -72,6 +73,7 @@ nodecg.listenFor('ncgsplit-run-ready', run => {
 });
 
 nodecg.listenFor('ncgsplit-run-start', run => {
+  console.log("Run start");
   startTime = run.startTime;
   startOffset = run.startOffset ? run.startOffset : 0;
   timerInterval = setInterval(function() {
@@ -167,7 +169,11 @@ const scrollSegmentList = function (dir) {
 
 const displayTime = function(spanElement, time) {
   let formattedTime = formatTime(time, true);
-  spanElement.text(formattedTime.sign + formattedTime.minutes+":"+formattedTime.seconds + "." + formattedTime.tensOfSeconds);
+  let hours = "";
+  if (formattedTime.hours > 0) {
+    hours = formattedTime.hours+":";
+  }
+  spanElement.text(formattedTime.sign + hours+formattedTime.minutes+":"+formattedTime.seconds + "." + formattedTime.tensOfSeconds);
 }
 
 const formatTime = function(time, pad) {
@@ -182,12 +188,15 @@ const formatTime = function(time, pad) {
   let secondsStr = (pad && (seconds < 10)) ? ("0"+seconds) : seconds;
   let minutes = Math.floor(time/600) % 60;
   let minutesStr = (pad && (minutes < 10)) ? ("0"+minutes) : minutes;
+  let hours = Math.floor(time/36000) % 60;
+  let hoursStr = (pad && (hours < 10)) ? ("0"+hours) : hours;
 
   let formattedTime = {
     sign : sign,
     tensOfSeconds : tensOfSeconds,
     seconds : secondsStr,
-    minutes : minutesStr
+    minutes : minutesStr,
+    hours : hoursStr
   }
 
   return formattedTime;
